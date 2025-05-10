@@ -5,6 +5,7 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuLabel 
 } from './dropdown-menu';
+import { type Theme, themes } from './themes';
 
 // Create exportable components for the default toolbar items
 // These can be used directly as children or combined with custom elements
@@ -19,19 +20,27 @@ export interface DataTableGlobalFilterProps {
    * Callback to set global filter value
    */
   setGlobalFilter: (value: string) => void;
+  
+  /**
+   * Optional theme
+   */
+  theme?: Theme;
 }
 
 export function DataTableGlobalFilter({
   globalFilter, 
   setGlobalFilter,
+  theme = 'default',
 }: DataTableGlobalFilterProps) {
+  const themeStyles = themes[theme] || themes.default;
+  
   return (
-    <div className="flex-grow">
+    <div className={themeStyles.toolbarSection}>
       <input
         type="text"
         value={globalFilter ?? ''}
         onChange={(e) => setGlobalFilter(String(e.target.value))}
-        className="block w-full sm:w-auto md:min-w-[250px] lg:min-w-[300px] p-2 border border-gray-300 rounded-md shadow-sm focus:ring-4 focus:ring-indigo-50 focus:border-gray-300 sm:text-sm transition-all duration-150 ease-in-out"
+        className={themeStyles.toolbarSearchInput}
         placeholder="Search all columns..."
         aria-label="Search all columns"
       />
@@ -44,11 +53,19 @@ export interface DataTableColumnToggleProps<TData extends { id: string }> {
    * The table instance
    */
   table: Table<TData>;
+  
+  /**
+   * Optional theme
+   */
+  theme?: Theme;
 }
 
 export function DataTableColumnToggle<TData extends { id: string }>({
   table,
+  theme = 'default',
 }: DataTableColumnToggleProps<TData>) {
+  const themeStyles = themes[theme] || themes.default;
+  
   // Define the SVG icon for the dropdown button
   const columnFilterIcon = (
     <span className="flex items-center">
@@ -74,9 +91,9 @@ export function DataTableColumnToggle<TData extends { id: string }>({
   );
 
   return (
-    <div className="ml-auto flex-shrink-0">
-      <DropdownMenu buttonLabel={columnFilterIcon} showCaret={false}>
-        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+    <div className={themeStyles.toolbarDropdown}>
+      <DropdownMenu buttonLabel={columnFilterIcon} showCaret={false} theme={theme}>
+        <DropdownMenuLabel theme={theme}>Toggle columns</DropdownMenuLabel>
         
         {table
           .getAllLeafColumns()
@@ -99,6 +116,7 @@ export function DataTableColumnToggle<TData extends { id: string }>({
                   column.toggleVisibility(!!checked);
                 }}
                 id={`column-toggle-${column.id}`}
+                theme={theme}
               >
                 {columnDisplayName}
               </DropdownMenuCheckboxItem>
@@ -114,14 +132,22 @@ export interface DataTableToolbarProps {
    * Content to render inside the toolbar
    */
   children: React.ReactNode;
+  
+  /**
+   * Optional theme
+   */
+  theme?: Theme;
 }
 
 // Main DataTableToolbar becomes just a layout container
 export function DataTableToolbar({
   children,
+  theme = 'default',
 }: DataTableToolbarProps) {
+  const themeStyles = themes[theme] || themes.default;
+  
   return (
-    <div className="flex items-center justify-between p-2 border-b border-gray-200 gap-x-4">
+    <div className={themeStyles.toolbar}>
       {children}
     </div>
   );

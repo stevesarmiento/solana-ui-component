@@ -1,4 +1,5 @@
 import React from 'react';
+import { type Theme } from './themes';
 
 export interface DropdownMenuProps {
   /** Label for the dropdown button */
@@ -19,6 +20,8 @@ export interface DropdownMenuProps {
   showCaret?: boolean;
   /** Optional variant for the button styling */
   variant?: 'default' | 'ghost';
+  /** Optional theme */
+  theme?: Theme;
 }
 
 /**
@@ -35,13 +38,14 @@ export function DropdownMenu({
   onOpenChange,
   showCaret = true,
   variant = 'default',
+  theme = 'default',
 }: DropdownMenuProps) {
   // Use local state if not controlled externally
   const [internalIsOpen, setInternalIsOpen] = React.useState(false);
   const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
   
   const menuRef = React.useRef<HTMLDivElement>(null);
-
+  
   // Handler for toggling the dropdown
   const toggleDropdown = () => {
     const newState = !isOpen;
@@ -67,18 +71,27 @@ export function DropdownMenu({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [menuRef, onOpenChange]);
 
-  // Variant button styling options
-  const buttonVariants = {
-    default: "inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-4 focus:ring-indigo-50 focus:border-gray-300 sm:text-sm transition-all duration-150 ease-in-out",
-    ghost: "inline-flex justify-center w-full rounded-md px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm transition-all duration-150 ease-in-out"
-  };
+  // Button styling based on theme and variant
+  let buttonStyle = '';
   
-  // Select the appropriate button variant
-  const defaultButtonClass = buttonVariants[variant];
+  if (theme === 'windows95') {
+    buttonStyle = variant === 'ghost' 
+      ? "inline-flex justify-center bg-[#c0c0c0] px-3 py-1 text-sm font-bold text-black hover:bg-[#d0d0d0]"
+      : "inline-flex justify-center w-full bg-[#c0c0c0] px-4 py-1 border-2 border-t-white border-l-white border-b-gray-800 border-r-gray-800 active:border-t-gray-800 active:border-l-gray-800 active:border-b-white active:border-r-white text-sm font-bold";
+  } else {
+    buttonStyle = variant === 'ghost'
+      ? "inline-flex justify-center w-full rounded-md px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-150 ease-in-out"
+      : "inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-4 focus:ring-indigo-50 focus:border-gray-300 transition-all duration-150 ease-in-out";
+  }
   
-  // Default dropdown panel styling
-  const defaultDropdownClass = 
-    "origin-top-right absolute mt-2 w-auto min-w-38 rounded-md shadow-lg bg-white ring-1 ring-black/10 z-10 focus:outline-none";
+  // Default dropdown panel styling based on theme
+  let dropdownStyle = '';
+  
+  if (theme === 'windows95') {
+    dropdownStyle = "origin-top-right absolute mt-1 w-auto min-w-38 bg-[#c0c0c0] border-2 border-t-white border-l-white border-b-gray-800 border-r-gray-800 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] z-10";
+  } else {
+    dropdownStyle = "origin-top-right absolute mt-2 w-auto min-w-38 rounded-md shadow-lg bg-white ring-1 ring-black/10 z-10 focus:outline-none";
+  }
   
   // Apply alignment
   const alignmentClass = align === 'left' ? 'left-0' : 'right-0';
@@ -88,7 +101,7 @@ export function DropdownMenu({
       <div>
         <button
           type="button"
-          className={buttonClassName || defaultButtonClass}
+          className={buttonClassName || buttonStyle}
           id="dropdown-menu-button" 
           aria-haspopup="true"
           aria-expanded={isOpen}
@@ -115,7 +128,7 @@ export function DropdownMenu({
 
       {isOpen && (
         <div
-          className={`${defaultDropdownClass} ${alignmentClass} ${dropdownClassName}`}
+          className={`${dropdownStyle} ${alignmentClass} ${dropdownClassName}`}
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="dropdown-menu-button"
@@ -138,26 +151,31 @@ export function DropdownMenuItem({
   disabled = false,
   className = '',
   variant = 'default',
+  theme = 'default',
 }: {
   children: React.ReactNode;
   onClick?: () => void;
   disabled?: boolean;
   className?: string;
   variant?: 'default' | 'destructive';
+  theme?: Theme;
 }) {
-  const defaultClassName = "block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed";
+  let menuItemStyle = '';
   
-  const variantClassNames = {
-    default: defaultClassName,
-    destructive: "block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:bg-red-50 focus:text-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
-  };
-  
-  const baseClassName = variantClassNames[variant];
+  if (theme === 'windows95') {
+    menuItemStyle = variant === 'destructive'
+      ? "block w-full text-left px-4 py-2 text-sm text-red-700 bg-[#c0c0c0] hover:bg-red-100 disabled:opacity-50 disabled:cursor-not-allowed"
+      : "block w-full text-left px-4 py-2 text-sm font-bold bg-[#c0c0c0] hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed";
+  } else {
+    menuItemStyle = variant === 'destructive'
+      ? "block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:bg-red-50 focus:text-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+      : "block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed";
+  }
   
   return (
     <button
       role="menuitem"
-      className={className || baseClassName}
+      className={className || menuItemStyle}
       onClick={onClick}
       disabled={disabled}
     >
@@ -176,6 +194,7 @@ export function DropdownMenuCheckboxItem({
   id,
   disabled = false,
   className = '',
+  theme = 'default',
 }: {
   children: React.ReactNode;
   checked: boolean;
@@ -183,19 +202,29 @@ export function DropdownMenuCheckboxItem({
   id?: string;
   disabled?: boolean;
   className?: string;
+  theme?: Theme;
 }) {
-  const defaultClassName = "flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed";
+  let checkboxItemStyle = '';
+  
+  if (theme === 'windows95') {
+    checkboxItemStyle = "flex items-center px-4 py-2 text-sm font-bold bg-[#c0c0c0] hover:bg-blue-100 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed";
+  } else {
+    checkboxItemStyle = "flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed";
+  }
   
   return (
     <label
-      className={className || defaultClassName}
+      className={className || checkboxItemStyle}
       role="menuitemcheckbox"
       aria-checked={checked}
       htmlFor={id}
     >
       <input
         type="checkbox"
-        className="form-checkbox h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 mr-3"
+        className={theme === 'windows95' 
+          ? "h-4 w-4 border-2 border-gray-800 mr-3" 
+          : "form-checkbox h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 mr-3"
+        }
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
         id={id}
@@ -209,8 +238,11 @@ export function DropdownMenuCheckboxItem({
 /**
  * A simple divider line for the dropdown menu.
  */
-export function DropdownMenuDivider() {
-  return <div className="h-px my-1 bg-gray-200" role="separator" />;
+export function DropdownMenuDivider({ theme = 'default' }: { theme?: Theme }) {
+  return <div className={theme === 'windows95' 
+    ? "h-[2px] my-1 bg-gray-400" 
+    : "h-px my-1 bg-gray-200"
+  } role="separator" />;
 }
 
 /**
@@ -219,14 +251,22 @@ export function DropdownMenuDivider() {
 export function DropdownMenuLabel({
   children,
   className = '',
+  theme = 'default',
 }: {
   children: React.ReactNode;
   className?: string;
+  theme?: Theme;
 }) {
-  const defaultClassName = "px-3 py-1 text-xs font-medium text-gray-400  uppercase tracking-wide";
+  let labelStyle = '';
+  
+  if (theme === 'windows95') {
+    labelStyle = "px-3 py-1 text-xs font-bold text-gray-900 uppercase tracking-wide";
+  } else {
+    labelStyle = "px-3 py-1 text-xs font-medium text-gray-400 uppercase tracking-wide";
+  }
   
   return (
-    <div className={className || defaultClassName} role="presentation">
+    <div className={className || labelStyle} role="presentation">
       {children}
     </div>
   );

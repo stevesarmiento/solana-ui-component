@@ -12,6 +12,7 @@ solution for displaying tabular data within web3 React applications.
   attributes and considerations for keyboard navigation.
 - **Customizable:** Offers extensive customization options through props and
   Tailwind CSS.
+- **Themable:** Includes a powerful theming system with pre-built themes.
 - **Composable:** Modular architecture with separate components for rows,
   headers, toolbars, and more.
 - **Modern Stack:** Leverages TanStack Table for headless UI and functionality,
@@ -39,6 +40,8 @@ solution for displaying tabular data within web3 React applications.
 - **Type-Safe:** Built with TypeScript, ensuring robust and maintainable code.
 - **Styled with Tailwind CSS:** Easily customize the appearance using utility
   classes or by extending your project's Tailwind configuration.
+- **Theming System:** Switch between pre-built themes or create your own custom
+  themes.
 - **Accessibility:**
   - Uses appropriate ARIA attributes (`aria-live`, `aria-busy`, `aria-label`,
     `role="status"`, etc.).
@@ -54,10 +57,11 @@ flexibility:
   indicators.
 - `data-table-row.tsx` Provides customizable row rendering.
 - `data-table-toolbar.tsx` Container for search and column visibility controls.
-- `data-table-pagination-controls.tsx` Manages pagination UI and interactions.
+- `data-table-pagination.tsx` Manages pagination UI and interactions.
 - `data-table-row-actions.tsx` Dropdown menu for row-level actions.
 - `data-table-skeleton.tsx` Loading placeholder with animated elements.
-- `use-data-table.tsx` Custom hook that encapsulates table state management.
+- `use-data-table.ts` Custom hook that encapsulates table state management.
+- `themes.ts` Central theme definition and management.
 
 This architecture allows developers to use the entire table as a unit or to
 compose their own tables using the individual pieces.
@@ -154,6 +158,7 @@ function MyPage() {
         columns={myColumns}
         tableId="my-data-table"
         emptyStateMessage="No users found."
+        theme="default" // Optional: 'default' or 'windows95'
       />
     </div>
   );
@@ -182,8 +187,86 @@ The `DataTable` component accepts the following props:
 | `tableId`           | `string`                      | `undefined`             | A unique ID for the table element. Useful for accessibility (e.g., `aria-labelledby`) or for targeting with tests. |
 | `renderRow`         | `Function`                    | `undefined`             | Optional custom row renderer function for complete control over row rendering.                                     |
 | `renderHeader`      | `Function`                    | `undefined`             | Optional custom header renderer function for complete control over header rendering.                               |
+| `theme`             | `'default' \| 'windows95'`    | `'default'`             | Visual theme to apply to the entire table. Currently supports 'default' and 'windows95'.                           |
 
 _(Where `TData` is a generic type extending `{ id: string }`)_
+
+## Theming System
+
+The DataTable component includes a robust theming system that allows for
+consistent styling across all parts of the table.
+
+### Available Themes
+
+The component currently ships with two built-in themes:
+
+1. **Default Theme**: A modern, clean interface with subtle shadows, rounded
+   corners, and a professional color scheme.
+
+2. **Windows 95 Theme**: A nostalgic theme inspired by the classic Windows 95
+   UI, featuring:
+   - Gray backgrounds with sharp edges
+   - Classic 3D-style borders (light on top/left, dark on bottom/right)
+   - Chunky buttons and controls
+   - Pixel-perfect styling reminiscent of retro interfaces
+
+### Using Themes
+
+To apply a theme, simply pass the `theme` prop to the DataTable component:
+
+```tsx
+// Modern theme (default)
+<DataTable 
+  data={myData} 
+  columns={myColumns}
+  theme="default" 
+/>
+
+// Windows 95 theme
+<DataTable 
+  data={myData} 
+  columns={myColumns}
+  theme="windows95" 
+/>
+```
+
+### Theme Consistency
+
+The theming system ensures consistent styling across all aspects of the table:
+
+- Table headers and rows
+- Toolbar controls (search, column visibility)
+- Pagination controls
+- Row action menus
+- Loading skeletons
+- Buttons and interactive elements
+
+### Creating Custom Themes
+
+The theming system is extensible. To create your own theme:
+
+1. Modify the `Theme` type in `themes.ts` to include your new theme name
+2. Add your theme's styles to the `themes` object in the same file
+3. Apply your theme using the `theme` prop
+
+Example of how to extend the theming system:
+
+```tsx
+// In themes.ts
+export type Theme = "default" | "windows95" | "myCustomTheme";
+
+// Add your theme to the themes object
+export const themes: Record<Theme, ThemeStyles> = {
+  default: {/* existing styles */},
+  windows95: {/* existing styles */},
+  myCustomTheme: {
+    // Define your custom theme styles here
+    table: "min-w-full border-2 border-purple-300 overflow-hidden",
+    headerWrapper: "bg-purple-100",
+    // ...other style properties
+  },
+};
+```
 
 ## Advanced Usage
 
@@ -246,6 +329,7 @@ actions:
   onEdit={(data) => openEditModal(data)}
   onDelete={(data) => deleteUser(data.id)}
   disabled={!hasPermission("edit_users")}
+  theme="default" // Match this with your DataTable theme
 />;
 ```
 
@@ -268,68 +352,21 @@ several ways to customize its appearance:
    />
    ```
 
-3. **Custom Component Rendering:** Use the `renderRow`, `renderHeader`, or
+3. **Theming System:** Use the built-in themes or create your own custom theme.
+   ```tsx
+   <DataTable 
+     data={...} 
+     columns={...} 
+     theme="windows95" 
+   />
+   ```
+
+4. **Custom Component Rendering:** Use the `renderRow`, `renderHeader`, or
    create custom cell renderers to completely control the appearance of table
    elements.
 
-4. **Tailwind Configuration:** For more global changes (like theming or custom
+5. **Tailwind Configuration:** For more global changes (like theming or custom
    variants), you can modify your project's `index.css` file.
-
-## Customization Examples
-
-### Custom Status Badge Cell
-
-```tsx
-{
-  accessorKey: "status",
-  header: "Status",
-  cell: ({ getValue }) => {
-    const status = getValue() as 'success' | 'failed' | 'processing';
-    let badgeStyles = "";
-    
-    if (status === 'success') {
-      badgeStyles = "bg-green-100 text-green-800";
-    } else if (status === 'failed') {
-      badgeStyles = "bg-red-100 text-red-800";
-    } else if (status === 'processing') {
-      badgeStyles = "bg-yellow-100 text-yellow-800";
-      return (
-        <span className={`px-2 inline-flex items-center gap-1.5 text-xs leading-5 font-semibold rounded-full ${badgeStyles}`}>
-          <svg
-            className="h-3.5 w-3.5 animate-spin text-yellow-600"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            />
-          </svg>
-          <span>
-            Processing
-          </span>
-        </span>
-      );
-    }
-
-    return (
-      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${badgeStyles}`}>
-        {status}
-      </span>
-    );
-  },
-}
-```
 
 ## Implementation Notes
 
@@ -343,7 +380,10 @@ The DataTable follows a modular design pattern:
 2. **Hook (`use-data-table.ts`)**: Encapsulates all table state logic and
    interactions with TanStack Table.
 
-3. **Specialized Subcomponents**:
+3. **Theming System (`themes.ts`)**: Centralized definition of theme styles for
+   consistent appearance across all components.
+
+4. **Specialized Subcomponents**:
    - `data-table-header.tsx`: Header rendering with sort indicators
    - `data-table-row.tsx`: Row rendering and customization
    - `data-table-toolbar.tsx`: Search and column visibility controls

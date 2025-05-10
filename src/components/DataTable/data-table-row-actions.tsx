@@ -1,4 +1,5 @@
 import { DropdownMenu, DropdownMenuItem, DropdownMenuDivider } from './dropdown-menu';
+import { type Theme, themes } from './themes';
 
 export interface DataTableRowActionsProps<TData> {
   /**
@@ -25,6 +26,11 @@ export interface DataTableRowActionsProps<TData> {
    * Optional flag to disable all actions
    */
   disabled?: boolean;
+  
+  /**
+   * Optional theme
+   */
+  theme?: Theme;
 }
 
 /**
@@ -37,7 +43,10 @@ export function DataTableRowActions<TData>({
   onEdit,
   onDelete,
   disabled = false,
+  theme = 'default',
 }: DataTableRowActionsProps<TData>) {
+  const themeStyles = themes[theme] || themes.default;
+  
   const ellipsisIcon = (
     <svg 
       xmlns="http://www.w3.org/2000/svg" 
@@ -49,7 +58,7 @@ export function DataTableRowActions<TData>({
       strokeWidth="2" 
       strokeLinecap="round"  
       strokeLinejoin="round"
-      className="text-gray-500" 
+      className={themeStyles.rowActionsIcon}
       aria-hidden="true"
     >
       <circle cx="12" cy="12" r="1"/>
@@ -63,12 +72,14 @@ export function DataTableRowActions<TData>({
       buttonLabel={ellipsisIcon} 
       showCaret={false} 
       align="left"
-      buttonClassName="rounded-md p-2 hover:bg-gray-100 focus:outline-none"
+      buttonClassName={themeStyles.rowActionsButton}
+      theme={theme}
     >
       {onView && (
         <DropdownMenuItem 
           onClick={() => onView(row.original)} 
           disabled={disabled}
+          theme={theme}
         >
           View
         </DropdownMenuItem>
@@ -78,18 +89,20 @@ export function DataTableRowActions<TData>({
         <DropdownMenuItem 
           onClick={() => onEdit(row.original)} 
           disabled={disabled}
+          theme={theme}
         >
           Edit
         </DropdownMenuItem>
       )}
       
-      {onView && onDelete && <DropdownMenuDivider />}
+      {onView && onDelete && <DropdownMenuDivider theme={theme} />}
       
       {onDelete && (
         <DropdownMenuItem 
           onClick={() => onDelete(row.original)} 
           disabled={disabled}
           variant="destructive"
+          theme={theme}
         >
           Delete
         </DropdownMenuItem>

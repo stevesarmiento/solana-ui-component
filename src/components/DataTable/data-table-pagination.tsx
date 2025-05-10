@@ -1,4 +1,5 @@
 import { type Table } from '@tanstack/react-table';
+import { type Theme, themes } from './themes';
 
 export interface DataTablePaginationControlsProps<TData extends { id: string }> {
   /**
@@ -10,36 +11,41 @@ export interface DataTablePaginationControlsProps<TData extends { id: string }> 
    * Available page size options
    */
   pageSizeOptions?: number[];
+  
+  /**
+   * Optional theme
+   */
+  theme?: Theme;
 }
 
 export function DataTablePaginationControls<TData extends { id: string }>({
   table,
   pageSizeOptions = [10, 20, 30, 50, 100],
+  theme = 'default',
 }: DataTablePaginationControlsProps<TData>) {
-  const buttonBaseClasses = "relative inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2";
-  const iconButtonClasses = "relative inline-flex items-center justify-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2";
+  const themeStyles = themes[theme] || themes.default;
 
   return (
-    <div className="flex items-center justify-between py-3 px-2 border-t border-gray-200">
+    <div className={themeStyles.pagination}>
       <div className="flex-1 flex justify-between sm:hidden">
         <button
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
-          className={buttonBaseClasses}
+          className={themeStyles.paginationButton}
         >
           Previous
         </button>
         <button
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
-          className={`${buttonBaseClasses} ml-3`}
+          className={themeStyles.paginationButton}
         >
           Next
         </button>
       </div>
       <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
         <div className="flex items-center gap-x-2">
-          <span className="text-sm text-gray-700">
+          <span className={themeStyles.paginationText}>
             Page{' '}
             <span className="font-medium">
               {table.getState().pagination.pageIndex + 1}
@@ -52,7 +58,7 @@ export function DataTablePaginationControls<TData extends { id: string }>({
               onChange={(e) => {
                 table.setPageSize(Number(e.target.value));
               }}
-              className="appearance-none w-auto pl-3 pr-8 py-1.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white"
+              className={themeStyles.paginationSelect}
             >
               {pageSizeOptions.map((size) => (
                 <option key={size} value={size}>
@@ -68,7 +74,7 @@ export function DataTablePaginationControls<TData extends { id: string }>({
           </div>
         </div>
         <div className="flex items-center gap-x-2">
-         <span className="text-sm text-gray-700">
+         <span className={themeStyles.paginationText}>
             Go to page:
             <input
               type="number"
@@ -77,7 +83,7 @@ export function DataTablePaginationControls<TData extends { id: string }>({
                 const page = e.target.value ? Number(e.target.value) - 1 : 0;
                 table.setPageIndex(page);
               }}
-              className="ml-1 w-16 p-1.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={themeStyles.paginationInput}
             />
           </span>
           <div className="w-[1px] h-4 bg-gray-300"></div>
@@ -88,7 +94,7 @@ export function DataTablePaginationControls<TData extends { id: string }>({
             <button
               onClick={() => table.setPageIndex(0)}
               disabled={!table.getCanPreviousPage()}
-              className={`${iconButtonClasses} rounded-l-md`}
+              className={`${themeStyles.paginationIconButton} rounded-l-md`}
             >
               <span className="sr-only">First</span>
               <svg 
@@ -109,7 +115,7 @@ export function DataTablePaginationControls<TData extends { id: string }>({
             <button
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
-              className={iconButtonClasses}
+              className={themeStyles.paginationIconButton}
             >
               <span className="sr-only">Previous</span>
               <svg 
@@ -129,7 +135,7 @@ export function DataTablePaginationControls<TData extends { id: string }>({
             <button
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
-              className={iconButtonClasses}
+              className={themeStyles.paginationIconButton}
             >
               <span className="sr-only">Next</span>
               <svg 
@@ -149,7 +155,7 @@ export function DataTablePaginationControls<TData extends { id: string }>({
             <button
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
               disabled={!table.getCanNextPage()}
-              className={`${iconButtonClasses} rounded-r-md`}
+              className={`${themeStyles.paginationIconButton} rounded-r-md`}
             >
               <span className="sr-only">Last</span>
               <svg 

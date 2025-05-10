@@ -1,4 +1,5 @@
 import { type Row, flexRender } from '@tanstack/react-table';
+import { type Theme, themes } from './themes';
 
 export interface DataTableRowProps<TData extends { id: string }> {
   /**
@@ -15,6 +16,11 @@ export interface DataTableRowProps<TData extends { id: string }> {
    * Optional additional content to render at the end of the row
    */
   children?: React.ReactNode;
+  
+  /**
+   * Optional theme for the row
+   */
+  theme?: Theme;
 }
 
 /**
@@ -25,16 +31,19 @@ export function DataTableRow<TData extends { id: string }>({
   row,
   className = '',
   children,
+  theme = 'default',
 }: DataTableRowProps<TData>) {
+  const themeStyles = themes[theme] || themes.default;
+  
   return (
     <tr
       key={row.id}
-      className={`hover:bg-gray-50 transition-colors duration-150 ${className}`}
+      className={`${themeStyles.row} ${className}`}
     >
       {row.getVisibleCells().map((cell) => (
         <td
           key={cell.id}
-          className="px-6 py-4 whitespace-nowrap text-sm text-gray-800"
+          className={themeStyles.cell}
         >
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </td>

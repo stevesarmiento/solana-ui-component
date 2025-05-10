@@ -1,4 +1,5 @@
 import { type HeaderGroup, flexRender } from "@tanstack/react-table";
+import { type Theme, themes } from './themes';
 
 export interface DataTableHeaderProps<TData extends { id: string }> {
   /**
@@ -10,6 +11,11 @@ export interface DataTableHeaderProps<TData extends { id: string }> {
    * Optional custom class name for the header row
    */
   className?: string;
+  
+  /**
+   * Optional theme for the header
+   */
+  theme?: Theme;
 }
 
 /**
@@ -19,16 +25,19 @@ export interface DataTableHeaderProps<TData extends { id: string }> {
 export function DataTableHeader<TData extends { id: string }>({
   headerGroups,
   className = "",
+  theme = 'default',
 }: DataTableHeaderProps<TData>) {
+  const themeStyles = themes[theme] || themes.default;
+
   return (
-    <thead className={`bg-gray-50 ${className}`}>
+    <thead className={`${themeStyles.headerWrapper} ${className}`}>
       {headerGroups.map((headerGroup) => (
-        <tr key={headerGroup.id}>
+        <tr key={headerGroup.id} className={themeStyles.headerRow}>
           {headerGroup.headers.map((header) => (
             <th
               key={header.id}
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              className={themeStyles.headerCell}
               style={{
                 cursor: header.column.getCanSort() ? "pointer" : "default",
               }}

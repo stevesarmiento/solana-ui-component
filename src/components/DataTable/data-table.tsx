@@ -11,6 +11,7 @@ import { DataTableSkeleton } from './data-table-skeleton';
 import { DataTableRow } from './data-table-row';
 import { DataTableHeader } from './data-table-header';
 import { useDataTable } from './use-data-table';
+import { type Theme, themes } from './themes';
 
 // Column Meta augmentation - would need to be in each file that uses it
 declare module '@tanstack/react-table' {
@@ -49,6 +50,7 @@ export interface DataTableProps<TData extends { id: string }> {
   tableId?: string;
   renderRow?: (props: { row: Row<TData>; table: Table<TData> }) => React.ReactNode;
   renderHeader?: (props: { headerGroups: HeaderGroup<TData>[] }) => React.ReactNode;
+  theme?: Theme;
 }
 
 export function DataTable<TData extends { id: string }>({
@@ -66,6 +68,7 @@ export function DataTable<TData extends { id: string }>({
   pageSizeOptions = [10, 20, 30, 50, 100],
   renderRow,
   renderHeader,
+  theme = 'default',
 }: DataTableProps<TData>) {
 
   const { table, globalFilter, setGlobalFilter } = useDataTable<TData>({
@@ -78,6 +81,8 @@ export function DataTable<TData extends { id: string }>({
     onPageSizeChange,
   });
 
+  const themeStyles = themes[theme] || themes.default;
+
   if (isLoading) {
     return (
       <div className={className}>
@@ -86,6 +91,7 @@ export function DataTable<TData extends { id: string }>({
           rowCount={table.getState().pagination.pageSize || initialPageSize || pageSizeOptions?.[0] || 10}
           showToolbar
           showPagination
+          theme={theme}
         />
       </div>
     );
@@ -94,32 +100,33 @@ export function DataTable<TData extends { id: string }>({
   // Main wrapper div for both data-filled and empty states (after loading)
   return (
     <div className={`shadow sm:rounded-lg ring-1 ring-gray-200 ${className}`}>
-      <DataTableToolbar>
+      <DataTableToolbar theme={theme}>
         <DataTableGlobalFilter
           globalFilter={globalFilter}
           setGlobalFilter={setGlobalFilter}
+          theme={theme}
         />
-        <DataTableColumnToggle table={table} />
+        <DataTableColumnToggle table={table} theme={theme} />
       </DataTableToolbar>
 
       <table
         id={tableId}
-        className="min-w-full divide-y divide-gray-200"
+        className={themeStyles.table}
         aria-label={tableId || 'Data table'}
       >
         {renderHeader ? (
           renderHeader({ headerGroups: table.getHeaderGroups() })
         ) : (
-          <DataTableHeader headerGroups={table.getHeaderGroups()} />
+          <DataTableHeader headerGroups={table.getHeaderGroups()} theme={theme} />
         )}
         
-        <tbody className="bg-white  divide-y divide-gray-200">
+        <tbody className={themeStyles.bodyWrapper}>
           {table.getRowModel().rows.length > 0 ? (
             table.getRowModel().rows.map((row) => (
               renderRow ? (
                 renderRow({ row, table })
               ) : (
-                <DataTableRow key={row.id} row={row} />
+                <DataTableRow key={row.id} row={row} theme={theme} />
               )
             ))
           ) : (
@@ -127,7 +134,7 @@ export function DataTable<TData extends { id: string }>({
             <tr>
               <td
                 colSpan={table.getVisibleLeafColumns().length || columns.length}
-                className="px-6 py-10 text-center text-gray-500"
+                className={`${themeStyles.cell} py-10 text-center`}
                 role="status"
                 aria-live="polite"
               >
@@ -139,7 +146,11 @@ export function DataTable<TData extends { id: string }>({
       </table>
 
       {(table.getPageCount() > 0 || controlledPageCount) && (
-         <DataTablePaginationControls table={table} pageSizeOptions={pageSizeOptions} />
+         <DataTablePaginationControls 
+           table={table} 
+           pageSizeOptions={pageSizeOptions} 
+           theme={theme}
+         />
       )}
     </div>
   );

@@ -155,24 +155,27 @@ function App() {
   return (
     <div className="container bg-white mx-auto p-4 sm:p-6 lg:p-8">
       <header className="mb-8 max-w-xl mx-auto">
-        <div className="flex items-center justify-center">
-        <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="32" 
-            height="32" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            className="text-indigo-500 fill-indigo-500 mr-2"
-          >
-            <rect width="7" height="7" x="14" y="3" rx="1"/>
-            <path d="M10 21V8a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H3"/>
-          </svg>
-          <span className="text-4xl font-bold text-gray-800 font-mono flex items-center">
-            Solana UI Kit
+        <div className="flex items-center justify-center gap-3">
+          <div className="flex items-center justify-center w-12 h-12 p-1 border shadow-sm border-gray-300 rounded-xl">
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="32" 
+              height="32" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              className="text-indigo-500 fill-indigo-500"
+            >
+              <rect width="7" height="7" x="14" y="3" rx="1"/>
+              <path d="M10 21V8a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H3"/>
+            </svg>            
+          </div>
+
+          <span className="text-5xl font-bold text-gray-800 font-mono flex items-center tracking-tighter">
+            Solana UIkit
           </span>
         </div>
         <p className="text-gray-600 mt-1">
