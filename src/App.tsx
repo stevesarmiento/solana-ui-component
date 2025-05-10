@@ -181,6 +181,46 @@ function App() {
         <p className="text-gray-600 mt-1">
           A flexible, robust, and accessible data table component for visualizing on-chain transactions. Features include sorting, filtering, pagination, and responsive design. All built with modern React, Tanstack Table, and Tailwind CSS.
         </p>
+
+        {/* Design principles - shortened descriptions */}
+        <div className="mt-6 border border-indigo-100 rounded-md bg-indigo-50/50 overflow-hidden">
+          <div className="bg-indigo-100 px-4 py-2 relative overflow-hidden">
+            <svg className="absolute inset-0 h-full w-full opacity-20">
+              <defs>
+                <pattern
+                  id="threshold-stripe"
+                  patternUnits="userSpaceOnUse"
+                  width="20"
+                  height="20"
+                  patternTransform="rotate(45)"
+                >
+                  <rect width="10" height="20" fill="rgb(255 255 255)" />
+                  <rect x="10" width="10" height="20" fill="transparent" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#threshold-stripe)" />
+            </svg>
+            <h3 className="text-sm font-semibold text-indigo-800 font-mono">Component Design Principles</h3>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm p-4">
+            <div className="p-2">
+              <h4 className="font-medium text-indigo-700">API Design</h4>
+              <p className="text-gray-700">Modular architecture with composable components that can be used independently or together.</p>
+            </div>
+            <div className="p-2">
+              <h4 className="font-medium text-indigo-700">Theming</h4>
+              <p className="text-gray-700">Centralized theme system with built-in themes and support for custom theme extension.</p>
+            </div>
+            <div className="p-2">
+              <h4 className="font-medium text-indigo-700">Accessibility</h4>
+              <p className="text-gray-700">ARIA attributes, keyboard navigation, and semantic HTML for inclusive user experience.</p>
+            </div>
+            <div className="p-2">
+              <h4 className="font-medium text-indigo-700">Type Safety</h4>
+              <p className="text-gray-700">Built with TypeScript for robust code quality and enhanced developer experience.</p>
+            </div>
+          </div>
+        </div>
       </header>
 
       <section>

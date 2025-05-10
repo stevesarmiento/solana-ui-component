@@ -34,16 +34,61 @@ export function DataTableGlobalFilter({
 }: DataTableGlobalFilterProps) {
   const themeStyles = themes[theme] || themes.default;
   
+  // Add keyboard event listener to the document for Command/Ctrl+K
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Check if Command/Ctrl+K is pressed
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault(); // Prevent browser default actions
+        // Find and focus the search input
+        const searchInput = document.querySelector('[data-search-input="true"]') as HTMLInputElement;
+        if (searchInput) {
+          searchInput.focus();
+        }
+      }
+    };
+    
+    // Add event listener
+    document.addEventListener('keydown', handleKeyDown);
+    
+    // Clean up
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+  
   return (
     <div className={themeStyles.toolbarSection}>
-      <input
-        type="text"
-        value={globalFilter ?? ''}
-        onChange={(e) => setGlobalFilter(String(e.target.value))}
-        className={themeStyles.toolbarSearchInput}
-        placeholder="Search all columns..."
-        aria-label="Search all columns"
-      />
+      <div className="relative max-w-[300px]">
+        <input
+          type="text"
+          value={globalFilter ?? ''}
+          onChange={(e) => setGlobalFilter(String(e.target.value))}
+          className={`${themeStyles.toolbarSearchInput} pl-9`}
+          placeholder="Search all columns..."
+          aria-label="Search all columns"
+          data-search-input="true"
+        />
+        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 20 20" 
+            fill="currentColor" 
+            className="w-4 h-4 text-gray-400"
+          >
+            <path 
+              fillRule="evenodd" 
+              d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" 
+              clipRule="evenodd" 
+            />
+          </svg>
+        </div>
+        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+          <kbd className="px-1.5 py-0.5 text-xs font-mono font-semibold text-gray-500 bg-gray-100 border border-gray-300 rounded-sm">
+            {navigator.platform.indexOf('Mac') !== -1 ? '⌘ K' : 'Ctrl+K'}
+          </kbd>
+        </div>
+      </div>
     </div>
   );
 }
