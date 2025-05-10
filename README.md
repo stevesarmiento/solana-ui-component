@@ -3,9 +3,7 @@
 ## Introduction/Overview
 
 The `DataTable` component is a reusable, accessible, and highly customizable
-solution for displaying tabular data within React applications. It's
-particularly well-suited for projects in the Solana ecosystem but is generic
-enough for a wide range of use cases.
+solution for displaying tabular data within web3 React applications.
 
 **Key Benefits:**
 
@@ -16,9 +14,9 @@ enough for a wide range of use cases.
   Tailwind CSS.
 - **Composable:** Modular architecture with separate components for rows,
   headers, toolbars, and more.
-- **Modern Stack:** Leverages TanStack Table (v8) for powerful headless UI
-  logic, React for declarative UI, TypeScript for type safety, and Tailwind CSS
-  for styling.
+- **Modern Stack:** Leverages TanStack Table for headless UI and functionality,
+  React for declarative UI, TypeScript for type safety, and Tailwind CSS for
+  styling.
 
 ## Features List
 
@@ -51,14 +49,15 @@ enough for a wide range of use cases.
 The DataTable is built with a modular, composable architecture for maximum
 flexibility:
 
-- **DataTable:** The main component that orchestrates all the subcomponents.
-- **DataTableHeader:** Handles the table header rendering with sort indicators.
-- **DataTableRow:** Provides customizable row rendering.
-- **DataTableToolbar:** Container for search and column visibility controls.
-- **DataTablePaginationControls:** Manages pagination UI and interactions.
-- **DataTableRowActions:** Dropdown menu for row-level actions.
-- **DataTableSkeleton:** Loading placeholder with animated elements.
-- **useDataTable:** Custom hook that encapsulates table state management.
+- `data-table.tsx`: The main component that orchestrates all the subcomponents.
+- `data-table-header.tsx` Handles the table header rendering with sort
+  indicators.
+- `data-table-row.tsx` Provides customizable row rendering.
+- `data-table-toolbar.tsx` Container for search and column visibility controls.
+- `data-table-pagination-controls.tsx` Manages pagination UI and interactions.
+- `data-table-row-actions.tsx` Dropdown menu for row-level actions.
+- `data-table-skeleton.tsx` Loading placeholder with animated elements.
+- `use-data-table.tsx` Custom hook that encapsulates table state management.
 
 This architecture allows developers to use the entire table as a unit or to
 compose their own tables using the individual pieces.
@@ -109,9 +108,8 @@ interface MyDataType {
 
 // Sample data
 const myData: MyDataType[] = [
-  { id: "1", name: "Alice Wonderland", age: 30, email: "alice@example.com" },
-  { id: "2", name: "Bob The Builder", age: 45, email: "bob@example.com" },
-  { id: "3", name: "Charlie Brown", age: 8, email: "charlie@example.com" },
+  { id: "1", name: "Anatoly", age: 30, email: "toly@solana.com" },
+  { id: "2", name: "Raj", age: 45, email: "ikillyou@solana.com" },
 ];
 
 // Define your columns
