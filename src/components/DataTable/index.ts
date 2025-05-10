@@ -1,7 +1,6 @@
 // src/components/DataTable/index.ts
 
 export * from './data-table';
-export * from './types';
 export * from './data-table-toolbar';
 export * from './data-table-skeleton';
 export * from './data-table-pagination';
