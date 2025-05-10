@@ -273,7 +273,7 @@ several ways to customize its appearance:
    elements.
 
 4. **Tailwind Configuration:** For more global changes (like theming or custom
-   variants), you can modify your project's `tailwind.config.js` file.
+   variants), you can modify your project's `index.css` file.
 
 ## Customization Examples
 
