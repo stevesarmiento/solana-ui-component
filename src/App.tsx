@@ -67,7 +67,7 @@ const sampleColumns: ColumnDef<SolanaTransactionRow>[] = [
       return (
         <button
           onClick={() => alert(`Viewing details for signature: ${row.original.signature}`)}
-          className="text-indigo-600 hover:text-indigo-900 text-sm font-medium"
+          className="px-3 py-1 cursor-pointer text-sm font-medium rounded-md text-indigo-600 hover:text-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 bg-indigo-50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           View
         </button>
@@ -101,10 +101,10 @@ function App() {
     <div className="container bg-white mx-auto p-4 sm:p-6 lg:p-8">
       <header className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800">
-          Solana Transaction Table Demo
+          Transaction Table
         </h1>
         <p className="text-gray-600 mt-1">
-          Displaying transactions using the custom DataTable component.
+          Displaying on-chain transactions using a custom DataTable component.
         </p>
       </header>
 

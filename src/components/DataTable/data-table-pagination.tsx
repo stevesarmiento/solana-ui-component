@@ -4,20 +4,23 @@ export function DataTablePaginationControls<TData extends { id: string }>({
   table,
   pageSizeOptions = [10, 20, 30, 50, 100],
 }: DataTablePaginationControlsProps<TData>) {
+  const buttonBaseClasses = "relative inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2";
+  const iconButtonClasses = "relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2";
+
   return (
     <div className="flex items-center justify-between py-3 px-2 border-t border-gray-200">
       <div className="flex-1 flex justify-between sm:hidden">
         <button
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
-          className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          className={buttonBaseClasses}
         >
           Previous
         </button>
         <button
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
-          className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          className={`${buttonBaseClasses} ml-3`}
         >
           Next
         </button>
@@ -36,7 +39,7 @@ export function DataTablePaginationControls<TData extends { id: string }>({
             onChange={(e) => {
               table.setPageSize(Number(e.target.value));
             }}
-            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+            className="mt-1 block w-auto pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
           >
             {pageSizeOptions.map((size) => (
               <option key={size} value={size}>
@@ -53,7 +56,7 @@ export function DataTablePaginationControls<TData extends { id: string }>({
                 const page = e.target.value ? Number(e.target.value) - 1 : 0;
                 table.setPageIndex(page);
               }}
-              className="ml-1 w-16 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm p-1"
+              className="ml-1 w-16 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
           </span>
         </div>
@@ -65,7 +68,7 @@ export function DataTablePaginationControls<TData extends { id: string }>({
             <button
               onClick={() => table.setPageIndex(0)}
               disabled={!table.getCanPreviousPage()}
-              className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className={`${iconButtonClasses} rounded-l-md`}
             >
               <span className="sr-only">First</span>
               {'<<'}
@@ -73,7 +76,7 @@ export function DataTablePaginationControls<TData extends { id: string }>({
             <button
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
-              className="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className={iconButtonClasses}
             >
               <span className="sr-only">Previous</span>
               {'<'}
@@ -81,7 +84,7 @@ export function DataTablePaginationControls<TData extends { id: string }>({
             <button
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
-              className="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className={iconButtonClasses}
             >
               <span className="sr-only">Next</span>
               {'>'}
@@ -89,7 +92,7 @@ export function DataTablePaginationControls<TData extends { id: string }>({
             <button
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
               disabled={!table.getCanNextPage()}
-              className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className={`${iconButtonClasses} rounded-r-md`}
             >
               <span className="sr-only">Last</span>
               {'>>'}

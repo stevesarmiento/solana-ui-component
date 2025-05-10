@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import React from 'react'; // Import React for JSX
 import { DataTable, type ColumnDef, type SolanaTransactionRow } from '../../components/DataTable'; // Adjusted import
 
 // --- Storybook Setup ---
@@ -93,7 +92,7 @@ const transactionColumns: ColumnDef<SolanaTransactionRow>[] = [
     cell: ({ row }) => (
       <button
         onClick={() => alert(`Viewing details for signature: ${row.original.signature}`)}
-        className="text-indigo-600 hover:text-indigo-900 text-sm font-medium"
+        className="px-3 py-1 text-sm font-medium rounded-md text-indigo-600 hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-50 hover:bg-indigo-100 border border-indigo-300"
       >
         View
       </button>
@@ -131,7 +130,7 @@ export const Loading: Story = {
     columns: transactionColumns,
     data: [],
     isLoading: true,
-    loadingMessage: 'Fetching latest Solana transactions...',
+    loadingMessage: 'Fetching latest transactions...',
     tableId: 'loading-transaction-table',
   },
 };
@@ -140,7 +139,7 @@ export const Empty: Story = {
   args: {
     columns: transactionColumns,
     data: [],
-    emptyStateMessage: 'No Solana transactions found.',
+    emptyStateMessage: 'No transactions found.',
     tableId: 'empty-transaction-table',
   },
 };

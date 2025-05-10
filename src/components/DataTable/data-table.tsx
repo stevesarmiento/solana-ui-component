@@ -13,13 +13,13 @@ import {
 import { type DataTableProps } from './types';
 import { DataTableToolbar } from './data-table-toolbar';
 import { DataTablePaginationControls } from './data-table-pagination';
+import { DataTableSkeleton } from './data-table-skeleton';
 
 // --- Main DataTable Component ---
 export function DataTable<TData extends { id: string }>({
   data,
   columns,
   isLoading = false,
-  loadingMessage = 'Loading data...',
   emptyStateMessage = 'No data available.',
   className = '',
   tableId,
@@ -72,29 +72,18 @@ export function DataTable<TData extends { id: string }>({
 
   if (isLoading) {
     return (
-      <div
-        role="status"
-        aria-live="polite"
-        aria-busy="true"
-        className={`p-6 text-center text-gray-500 ${className}`}
-      >
-        {loadingMessage}
+      <div className={className}>
+        <DataTableSkeleton
+          columnCount={columns.length}
+          rowCount={controlledPageSize || pageSizeOptions?.[0] || 10}
+          showToolbar
+          showPagination
+        />
       </div>
     );
   }
 
-  if (!table.getRowModel().rows.length && !isLoading) {
-    return (
-      <div
-        role="status"
-        aria-live="polite"
-        className={`p-6 text-center text-gray-500 ${className}`}
-      >
-        {emptyStateMessage}
-      </div>
-    );
-  }
-
+  // Main wrapper div for both data-filled and empty states (after loading)
   return (
     <div className={`shadow border-b border-gray-200 sm:rounded-lg ${className}`}>
       <DataTableToolbar
@@ -148,21 +137,36 @@ export function DataTable<TData extends { id: string }>({
           ))}
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {table.getRowModel().rows.map((row) => (
-            <tr
-              key={row.id}
-              className="hover:bg-gray-50 transition-colors duration-150"
-            >
-              {row.getVisibleCells().map((cell) => (
-                <td
-                  key={cell.id}
-                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-800"
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
+          {table.getRowModel().rows.length > 0 ? (
+            table.getRowModel().rows.map((row) => (
+              <tr
+                key={row.id}
+                className="hover:bg-gray-50 transition-colors duration-150"
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <td
+                    key={cell.id}
+                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-800"
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))
+          ) : (
+            // Empty state row
+            <tr>
+              <td
+                // Use table.getVisibleLeafColumns().length for accurate colSpan
+                colSpan={table.getVisibleLeafColumns().length || columns.length}
+                className="px-6 py-10 text-center text-gray-500" // Added more padding
+                role="status" // Keep role for screen readers on the message itself
+                aria-live="polite"
+              >
+                {emptyStateMessage}
+              </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
 
