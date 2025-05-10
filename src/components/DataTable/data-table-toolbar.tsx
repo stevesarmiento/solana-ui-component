@@ -31,7 +31,7 @@ export function DataTableGlobalFilter({
         type="text"
         value={globalFilter ?? ''}
         onChange={(e) => setGlobalFilter(String(e.target.value))}
-        className="block w-full sm:w-auto md:min-w-[250px] lg:min-w-[300px] p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        className="block w-full sm:w-auto md:min-w-[250px] lg:min-w-[300px] p-2 border border-gray-300 rounded-md shadow-sm focus:ring-4 focus:ring-indigo-50 focus:border-gray-300 sm:text-sm transition-all duration-150 ease-in-out"
         placeholder="Search all columns..."
         aria-label="Search all columns"
       />
@@ -62,7 +62,7 @@ export function DataTableColumnToggle<TData extends { id: string }>({
         strokeWidth="2" 
         strokeLinecap="round" 
         strokeLinejoin="round" 
-        className="lucide lucide-list-filter-icon lucide-list-filter"
+        className=""
         aria-hidden="true"
       >
         <path d="M3 6h18"/>
@@ -121,7 +121,7 @@ export function DataTableToolbar({
   children,
 }: DataTableToolbarProps) {
   return (
-    <div className="flex items-center justify-between py-4 px-2 sm:px-4 border-b border-gray-200 gap-x-4">
+    <div className="flex items-center justify-between p-2 border-b border-gray-200 gap-x-4">
       {children}
     </div>
   );

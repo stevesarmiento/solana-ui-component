@@ -43,17 +43,66 @@ export function DataTableHeader<TData extends { id: string }>({
                   : undefined
               }
             >
-              <div className="flex items-center">
+              <div className="flex items-center group">
                 {header.isPlaceholder
                   ? null
                   : flexRender(
                       header.column.columnDef.header,
                       header.getContext()
                     )}
-                {{
-                  asc: <span className="ml-1 text-gray-700">🔼</span>,
-                  desc: <span className="ml-1 text-gray-700">🔽</span>,
-                }[header.column.getIsSorted() as string] ?? null}
+                
+                {/* Sort indicator section */}
+                {header.column.getCanSort() && (
+                  <div className="ml-2 flex items-center">
+                    {header.column.getIsSorted() === "asc" ? (
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="16" 
+                        height="16" 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        strokeWidth="2" 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        className="text-gray-700"
+                      >
+                        <path d="m18 15-6-6-6 6"/>
+                      </svg>
+                    ) : header.column.getIsSorted() === "desc" ? (
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="16" 
+                        height="16" 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        strokeWidth="2" 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        className="text-gray-700"
+                      >
+                        <path d="m6 9 6 6 6-6"/>
+                      </svg>
+                    ) : (
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="16" 
+                        height="16" 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        strokeWidth="2" 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                      >
+                        <path d="m7 15 5 5 5-5"/>
+                        <path d="m7 9 5-5 5 5"/>
+                      </svg>
+                    )}
+                  </div>
+                )}
               </div>
             </th>
           ))}

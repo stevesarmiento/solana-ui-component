@@ -20,7 +20,8 @@ declare module '@tanstack/react-table' {
   }
 }
 
-// Example data type - could be moved to a separate example file
+// Example data type - could be moved to a separate example file 
+// Delete this and implement your own data type under your project structure
 export interface SolanaTransactionRow {
   id: string;
   signature: string;
@@ -112,7 +113,7 @@ export function DataTable<TData extends { id: string }>({
           <DataTableHeader headerGroups={table.getHeaderGroups()} />
         )}
         
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="bg-white  divide-y divide-gray-200">
           {table.getRowModel().rows.length > 0 ? (
             table.getRowModel().rows.map((row) => (
               renderRow ? (

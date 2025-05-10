@@ -17,6 +17,8 @@ export interface DropdownMenuProps {
   onOpenChange?: (isOpen: boolean) => void;
   /** Optional flag to show or hide the dropdown caret icon */
   showCaret?: boolean;
+  /** Optional variant for the button styling */
+  variant?: 'default' | 'ghost';
 }
 
 /**
@@ -32,6 +34,7 @@ export function DropdownMenu({
   isOpen: controlledIsOpen,
   onOpenChange,
   showCaret = true,
+  variant = 'default',
 }: DropdownMenuProps) {
   // Use local state if not controlled externally
   const [internalIsOpen, setInternalIsOpen] = React.useState(false);
@@ -64,13 +67,18 @@ export function DropdownMenu({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [menuRef, onOpenChange]);
 
-  // Default button styling that can be overridden
-  const defaultButtonClass = 
-    "inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500";
+  // Variant button styling options
+  const buttonVariants = {
+    default: "inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-4 focus:ring-indigo-50 focus:border-gray-300 sm:text-sm transition-all duration-150 ease-in-out",
+    ghost: "inline-flex justify-center w-full rounded-md px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm transition-all duration-150 ease-in-out"
+  };
+  
+  // Select the appropriate button variant
+  const defaultButtonClass = buttonVariants[variant];
   
   // Default dropdown panel styling
   const defaultDropdownClass = 
-    "origin-top-right absolute mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black/10 z-10 focus:outline-none";
+    "origin-top-right absolute mt-2 w-auto min-w-38 rounded-md shadow-lg bg-white ring-1 ring-black/10 z-10 focus:outline-none";
   
   // Apply alignment
   const alignmentClass = align === 'left' ? 'left-0' : 'right-0';
@@ -80,7 +88,7 @@ export function DropdownMenu({
       <div>
         <button
           type="button"
-          className={buttonClassName || defaultButtonClass} // Use custom class if provided
+          className={buttonClassName || defaultButtonClass}
           id="dropdown-menu-button" 
           aria-haspopup="true"
           aria-expanded={isOpen}
@@ -112,7 +120,7 @@ export function DropdownMenu({
           aria-orientation="vertical"
           aria-labelledby="dropdown-menu-button"
         >
-          <div className="py-1" role="none">
+          <div className="p-1" role="none">
             {children}
           </div>
         </div>

@@ -63,7 +63,7 @@ export function DataTableRowActions<TData>({
       buttonLabel={ellipsisIcon} 
       showCaret={false} 
       align="left"
-      buttonClassName="rounded-md p-2 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1"
+      buttonClassName="rounded-md p-2 hover:bg-gray-100 focus:outline-none"
     >
       {onView && (
         <DropdownMenuItem 
