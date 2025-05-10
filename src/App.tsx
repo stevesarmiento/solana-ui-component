@@ -178,12 +178,12 @@ function App() {
             Solana UIkit
           </span>
         </div>
-        <p className="text-gray-600 mt-1">
+        <p className="text-gray-600 mt-6">
           A flexible, robust, and accessible data table component for visualizing on-chain transactions. Features include sorting, filtering, pagination, and responsive design. All built with modern React, Tanstack Table, and Tailwind CSS.
         </p>
 
         {/* Design principles - shortened descriptions */}
-        <div className="mt-6 border border-indigo-100 rounded-md bg-indigo-50/50 overflow-hidden">
+        <div className="my-12 border border-indigo-100 rounded-md bg-indigo-50/50 overflow-hidden">
           <div className="bg-indigo-100 px-4 py-2 relative overflow-hidden">
             <svg className="absolute inset-0 h-full w-full opacity-20">
               <defs>
