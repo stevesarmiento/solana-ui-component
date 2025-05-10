@@ -1,4 +1,16 @@
-import { type DataTablePaginationControlsProps } from '../DataTable/types'; // Adjusted path to types
+import { type Table } from '@tanstack/react-table';
+
+export interface DataTablePaginationControlsProps<TData extends { id: string }> {
+  /**
+   * The table instance
+   */
+  table: Table<TData>;
+  
+  /**
+   * Available page size options
+   */
+  pageSizeOptions?: number[];
+}
 
 export function DataTablePaginationControls<TData extends { id: string }>({
   table,

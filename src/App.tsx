@@ -1,9 +1,10 @@
-import { DataTable, type SolanaTransactionRow, type ColumnDef } from './components/DataTable'; // Make sure this path is correct
-import './App.css'; // Keep your existing App.css if you have styles there
-// import './index.css'; // Ensure Tailwind's CSS is imported, usually in main.tsx
+import { DataTable, type SolanaTransactionRow } from './components/DataTable/data-table';
+import { type ColumnDef } from '@tanstack/react-table';
+import { DataTableRowActions } from './components/DataTable/data-table-row-actions';
+import './App.css';
 
 // Define sample columns (you can copy this from your DataTable.stories.tsx or define anew)
-const sampleColumns: ColumnDef<SolanaTransactionRow>[] = [
+const sampleColumns: ColumnDef<SolanaTransactionRow, unknown>[] = [
   {
     accessorKey: 'signature',
     header: 'Signature',
@@ -58,19 +59,29 @@ const sampleColumns: ColumnDef<SolanaTransactionRow>[] = [
       return (feeInLamports / 1_000_000_000).toFixed(6); // Show more precision for fees
     },
   },
-  // Add a simple action column example
+  // Actions column with dropdown menu
   {
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) => {
-      // const transaction = row.original; // Get the full transaction data
       return (
-        <button
-          onClick={() => alert(`Viewing details for signature: ${row.original.signature}`)}
-          className="px-3 py-1 cursor-pointer text-sm font-medium rounded-md text-indigo-600 hover:text-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 bg-indigo-50 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          View
-        </button>
+        <DataTableRowActions
+          row={row}
+          onView={(data) => {
+            // View action
+            alert(`Viewing details for signature: ${data.signature}`);
+          }}
+          onEdit={(data) => {
+            // Edit action 
+            alert(`Editing transaction: ${data.signature}`);
+          }}
+          onDelete={(data) => {
+            // Delete action
+            if (window.confirm(`Are you sure you want to delete transaction with signature ${data.signature}?`)) {
+              alert('Transaction would be deleted in a real app');
+            }
+          }}
+        />
       );
     },
   },

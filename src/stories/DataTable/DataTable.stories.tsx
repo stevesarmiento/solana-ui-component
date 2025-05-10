@@ -1,5 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { DataTable, type ColumnDef, type SolanaTransactionRow } from '../../components/DataTable'; // Adjusted import
+import { DataTable } from '../../components/DataTable/data-table'; 
+import type { SolanaTransactionRow } from '../../components/DataTable/data-table';
+import type { ColumnDef } from '@tanstack/react-table';
+import { DataTableRowActions } from '../../components/DataTable/data-table-row-actions';
 
 // --- Storybook Setup ---
 const meta: Meta<typeof DataTable<SolanaTransactionRow>> = { // Specify TData for DataTable
@@ -28,7 +31,7 @@ export default meta;
 type Story = StoryObj<typeof meta>; // This will infer TData as SolanaTransactionRow
 
 // --- Sample Solana Transaction Data & Columns (similar to App.tsx) ---
-const transactionColumns: ColumnDef<SolanaTransactionRow>[] = [
+const transactionColumns: ColumnDef<SolanaTransactionRow, unknown>[] = [
   {
     accessorKey: 'signature',
     header: 'Signature',
@@ -90,12 +93,20 @@ const transactionColumns: ColumnDef<SolanaTransactionRow>[] = [
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) => (
-      <button
-        onClick={() => alert(`Viewing details for signature: ${row.original.signature}`)}
-        className="px-3 py-1 text-sm font-medium rounded-md text-indigo-600 hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-50 hover:bg-indigo-100 border border-indigo-300"
-      >
-        View
-      </button>
+      <DataTableRowActions
+        row={row}
+        onView={(data) => {
+          alert(`Viewing details for signature: ${data.signature}`);
+        }}
+        onEdit={(data) => {
+          alert(`Editing transaction: ${data.signature}`);
+        }}
+        onDelete={(data) => {
+          if (window.confirm(`Are you sure you want to delete transaction with signature ${data.signature}?`)) {
+            alert('Transaction would be deleted in a real app');
+          }
+        }}
+      />
     ),
     enableSorting: false,
   },

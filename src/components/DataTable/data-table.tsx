@@ -1,21 +1,55 @@
-import React from 'react';
-import {
-  useReactTable,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  getFilteredRowModel,
-  flexRender,
-  type SortingState,
-  type VisibilityState,
+import { 
+  type ColumnDef, 
+  type HeaderGroup, 
+  type Row, 
+  type RowData, 
+  type Table
 } from '@tanstack/react-table';
-
-import { type DataTableProps } from './types';
-import { DataTableToolbar } from './data-table-toolbar';
+import { DataTableToolbar, DataTableGlobalFilter, DataTableColumnToggle } from './data-table-toolbar';
 import { DataTablePaginationControls } from './data-table-pagination';
 import { DataTableSkeleton } from './data-table-skeleton';
+import { DataTableRow } from './data-table-row';
+import { DataTableHeader } from './data-table-header';
+import { useDataTable } from './use-data-table';
 
-// --- Main DataTable Component ---
+// Column Meta augmentation - would need to be in each file that uses it
+declare module '@tanstack/react-table' {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface ColumnMeta<TData extends RowData, TValue> {
+    columnLabel?: string;
+  }
+}
+
+// Example data type - could be moved to a separate example file
+export interface SolanaTransactionRow {
+  id: string;
+  signature: string;
+  blockTime: number | null;
+  slot: number;
+  source?: string;
+  fee: number;
+  status: 'success' | 'failed' | 'confirmed' | 'finalized' | 'processing';
+}
+
+// Main props interface
+export interface DataTableProps<TData extends { id: string }> {
+  data: TData[];
+  columns: ColumnDef<TData, unknown>[];
+  isLoading?: boolean;
+  loadingMessage?: React.ReactNode;
+  emptyStateMessage?: React.ReactNode;
+  pageCount?: number;
+  pageIndex?: number;
+  pageSize?: number;
+  onPageIndexChange?: (pageIndex: number) => void;
+  onPageSizeChange?: (pageSize: number) => void;
+  pageSizeOptions?: number[];
+  className?: string;
+  tableId?: string;
+  renderRow?: (props: { row: Row<TData>; table: Table<TData> }) => React.ReactNode;
+  renderHeader?: (props: { headerGroups: HeaderGroup<TData>[] }) => React.ReactNode;
+}
+
 export function DataTable<TData extends { id: string }>({
   data,
   columns,
@@ -24,50 +58,23 @@ export function DataTable<TData extends { id: string }>({
   className = '',
   tableId,
   pageCount: controlledPageCount,
-  pageIndex: controlledPageIndex,
-  pageSize: controlledPageSize,
+  pageIndex: initialPageIndex,
+  pageSize: initialPageSize,
   onPageIndexChange,
   onPageSizeChange,
   pageSizeOptions = [10, 20, 30, 50, 100],
+  renderRow,
+  renderHeader,
 }: DataTableProps<TData>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [globalFilter, setGlobalFilter] = React.useState('');
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
 
-  const table = useReactTable({
+  const { table, globalFilter, setGlobalFilter } = useDataTable<TData>({
     data,
     columns,
-    state: {
-      sorting,
-      globalFilter,
-      columnVisibility,
-      ...(controlledPageIndex !== undefined && controlledPageSize !== undefined && {
-        pagination: {
-          pageIndex: controlledPageIndex,
-          pageSize: controlledPageSize,
-        },
-      }),
-    },
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    ...(controlledPageCount !== undefined && { pageCount: controlledPageCount }),
-    manualPagination: !!controlledPageCount,
-    onPaginationChange: (updater) => {
-        if (typeof updater === 'function') {
-            const newPaginationState = updater(table.getState().pagination);
-            onPageIndexChange?.(newPaginationState.pageIndex);
-            onPageSizeChange?.(newPaginationState.pageSize);
-        } else {
-            onPageIndexChange?.(updater.pageIndex);
-            onPageSizeChange?.(updater.pageSize);
-        }
-    },
-    onSortingChange: setSorting,
-    onGlobalFilterChange: setGlobalFilter,
-    onColumnVisibilityChange: setColumnVisibility,
+    pageCount: controlledPageCount,
+    initialPageIndex,
+    initialPageSize,
+    onPageIndexChange,
+    onPageSizeChange,
   });
 
   if (isLoading) {
@@ -75,7 +82,7 @@ export function DataTable<TData extends { id: string }>({
       <div className={className}>
         <DataTableSkeleton
           columnCount={columns.length}
-          rowCount={controlledPageSize || pageSizeOptions?.[0] || 10}
+          rowCount={table.getState().pagination.pageSize || initialPageSize || pageSizeOptions?.[0] || 10}
           showToolbar
           showPagination
         />
@@ -85,82 +92,42 @@ export function DataTable<TData extends { id: string }>({
 
   // Main wrapper div for both data-filled and empty states (after loading)
   return (
-    <div className={`shadow border-b border-gray-200 sm:rounded-lg ${className}`}>
-      <DataTableToolbar
-        table={table}
-        globalFilter={globalFilter}
-        setGlobalFilter={setGlobalFilter}
-      />
+    <div className={`shadow sm:rounded-lg ring-1 ring-gray-200 ${className}`}>
+      <DataTableToolbar>
+        <DataTableGlobalFilter
+          globalFilter={globalFilter}
+          setGlobalFilter={setGlobalFilter}
+        />
+        <DataTableColumnToggle table={table} />
+      </DataTableToolbar>
 
       <table
         id={tableId}
         className="min-w-full divide-y divide-gray-200"
         aria-label={tableId || 'Data table'}
       >
-        <thead className="bg-gray-50">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  style={{
-                    cursor: header.column.getCanSort() ? 'pointer' : 'default',
-                  }}
-                  onClick={header.column.getToggleSortingHandler()}
-                  title={
-                    header.column.getCanSort()
-                      ? header.column.getNextSortingOrder() === 'asc'
-                        ? 'Sort ascending'
-                        : header.column.getNextSortingOrder() === 'desc'
-                        ? 'Sort descending'
-                        : 'Clear sort'
-                      : undefined
-                  }
-                >
-                  <div className="flex items-center">
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    {{
-                      asc: <span className="ml-1 text-gray-700">🔼</span>,
-                      desc: <span className="ml-1 text-gray-700">🔽</span>,
-                    }[header.column.getIsSorted() as string] ?? null}
-                  </div>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
+        {renderHeader ? (
+          renderHeader({ headerGroups: table.getHeaderGroups() })
+        ) : (
+          <DataTableHeader headerGroups={table.getHeaderGroups()} />
+        )}
+        
         <tbody className="bg-white divide-y divide-gray-200">
           {table.getRowModel().rows.length > 0 ? (
             table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                className="hover:bg-gray-50 transition-colors duration-150"
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-800"
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
+              renderRow ? (
+                renderRow({ row, table })
+              ) : (
+                <DataTableRow key={row.id} row={row} />
+              )
             ))
           ) : (
             // Empty state row
             <tr>
               <td
-                // Use table.getVisibleLeafColumns().length for accurate colSpan
                 colSpan={table.getVisibleLeafColumns().length || columns.length}
-                className="px-6 py-10 text-center text-gray-500" // Added more padding
-                role="status" // Keep role for screen readers on the message itself
+                className="px-6 py-10 text-center text-gray-500"
+                role="status"
                 aria-live="polite"
               >
                 {emptyStateMessage}
@@ -170,7 +137,7 @@ export function DataTable<TData extends { id: string }>({
         </tbody>
       </table>
 
-      {(table.getPageCount() > 1 || controlledPageCount) && (
+      {(table.getPageCount() > 0 || controlledPageCount) && (
          <DataTablePaginationControls table={table} pageSizeOptions={pageSizeOptions} />
       )}
     </div>
