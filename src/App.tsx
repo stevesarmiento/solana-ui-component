@@ -153,8 +153,8 @@ const sampleData: SolanaTransactionRow[] = [
 
 function App() {
   return (
-    <div className="container bg-white mx-auto p-4 sm:p-6 lg:p-8">
-      <header className="mb-8 max-w-xl mx-auto">
+    <div className="bg-white p-4 sm:p-6 lg:p-8">
+      <header className="mb-8 w-full sm:max-w-xl mx-auto">
         <div className="flex items-center justify-center gap-3">
           <div className="flex items-center justify-center w-12 h-12 p-1 border shadow-sm border-gray-300 rounded-xl">
             <svg 
@@ -183,7 +183,7 @@ function App() {
         </p>
 
         {/* Design principles - shortened descriptions */}
-        <div className="my-12 border border-indigo-100 rounded-md bg-indigo-50/50 overflow-hidden">
+        <div className="my-12 border border-black/10 rounded-md bg-indigo-50/50 overflow-hidden">
           <div className="bg-indigo-100 px-4 py-2 relative overflow-hidden">
             <svg className="absolute inset-0 h-full w-full opacity-20">
               <defs>

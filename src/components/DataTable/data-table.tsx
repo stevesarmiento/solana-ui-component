@@ -99,7 +99,7 @@ export function DataTable<TData extends { id: string }>({
   }
 
   return (
-    <div className={`shadow sm:rounded-lg ring-1 ring-gray-200 ${className}`}>
+    <div className={`${themeStyles.container} ${className}`}>
       <DataTableToolbar theme={theme}>
         <DataTableGlobalFilter
           globalFilter={globalFilter}
@@ -109,41 +109,43 @@ export function DataTable<TData extends { id: string }>({
         <DataTableColumnToggle table={table} theme={theme} />
       </DataTableToolbar>
 
-      <table
-        id={tableId}
-        className={themeStyles.table}
-        aria-label={tableId || 'Data table'}
-      >
-        {renderHeader ? (
-          renderHeader({ headerGroups: table.getHeaderGroups() })
-        ) : (
-          <DataTableHeader headerGroups={table.getHeaderGroups()} theme={theme} />
-        )}
-        
-        <tbody className={themeStyles.bodyWrapper}>
-          {table.getRowModel().rows.length > 0 ? (
-            table.getRowModel().rows.map((row) => (
-              renderRow ? (
-                renderRow({ row, table })
-              ) : (
-                <DataTableRow key={row.id} row={row} theme={theme} />
-              )
-            ))
+      <div className={themeStyles.tableWrapper}>
+        <table
+          id={tableId}
+          className={themeStyles.table}
+          aria-label={tableId || 'Data table'}
+        >
+          {renderHeader ? (
+            renderHeader({ headerGroups: table.getHeaderGroups() })
           ) : (
-            // Empty state row
-            <tr>
-              <td
-                colSpan={table.getVisibleLeafColumns().length || columns.length}
-                className={`${themeStyles.cell} py-10 text-center`}
-                role="status"
-                aria-live="polite"
-              >
-                {emptyStateMessage}
-              </td>
-            </tr>
+            <DataTableHeader headerGroups={table.getHeaderGroups()} theme={theme} />
           )}
-        </tbody>
-      </table>
+          
+          <tbody className={themeStyles.bodyWrapper}>
+            {table.getRowModel().rows.length > 0 ? (
+              table.getRowModel().rows.map((row) => (
+                renderRow ? (
+                  renderRow({ row, table })
+                ) : (
+                  <DataTableRow key={row.id} row={row} theme={theme} />
+                )
+              ))
+            ) : (
+              // Empty state row
+              <tr>
+                <td
+                  colSpan={table.getVisibleLeafColumns().length || columns.length}
+                  className={`${themeStyles.cell} py-10 text-center`}
+                  role="status"
+                  aria-live="polite"
+                >
+                  {emptyStateMessage}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {(table.getPageCount() > 0 || controlledPageCount) && (
          <DataTablePaginationControls 

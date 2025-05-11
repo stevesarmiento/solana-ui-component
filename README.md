@@ -77,7 +77,7 @@ compose their own tables using the individual pieces.
 
 1. **Clone the repository:**
    ```bash
-   git clone [Your GitHub Repo URL]
+   git clone [https://github.com/stevesarmiento/solana-ui-component.git]
    ```
 2. **Navigate to the project directory:**
    ```bash

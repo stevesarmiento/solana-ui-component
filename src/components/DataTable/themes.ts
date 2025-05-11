@@ -2,6 +2,8 @@ export type Theme = 'default' | 'windows95';
 
 export interface ThemeStyles {
   // Table core
+  container: string;
+  tableWrapper: string;
   table: string;
   
   // Header styles
@@ -43,7 +45,9 @@ export interface ThemeStyles {
 export const themes: Record<Theme, ThemeStyles> = {
   default: {
     // Table core
-    table: 'min-w-full divide-y divide-gray-200',
+    container: 'w-full flex flex-col sm:rounded-lg shadow ring-1 ring-gray-200',
+    tableWrapper: 'w-full relative',
+    table: 'w-full caption-bottom text-sm divide-y divide-gray-200',
     
     // Header styles
     headerWrapper: 'bg-gray-50',
@@ -82,7 +86,9 @@ export const themes: Record<Theme, ThemeStyles> = {
   
   windows95: {
     // Table core
-    table: 'min-w-full border-2 border-gray-400 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.2)]',
+    container: 'w-full flex flex-col',
+    tableWrapper: 'w-full relative overflow-auto',
+    table: 'w-full caption-bottom text-sm border-2 border-gray-400 shadow-[5px_5px_0px_0px_rgba(0,0,0,0.2)]',
     
     // Header styles
     headerWrapper: 'bg-[#c0c0c0] border-b-2 border-gray-400',
