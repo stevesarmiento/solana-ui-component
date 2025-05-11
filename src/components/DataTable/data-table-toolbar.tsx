@@ -111,7 +111,6 @@ export function DataTableColumnToggle<TData extends { id: string }>({
 }: DataTableColumnToggleProps<TData>) {
   const themeStyles = themes[theme] || themes.default;
   
-  // Define the SVG icon for the dropdown button
   const columnFilterIcon = (
     <span className="flex items-center">
       <svg 
@@ -184,7 +183,7 @@ export interface DataTableToolbarProps {
   theme?: Theme;
 }
 
-// Main DataTableToolbar becomes just a layout container
+// DataTableToolbar layout container
 export function DataTableToolbar({
   children,
   theme = 'default',

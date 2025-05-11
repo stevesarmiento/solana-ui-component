@@ -15,9 +15,10 @@ import { type Theme, themes } from './themes';
 
 // Column Meta augmentation - would need to be in each file that uses it
 declare module '@tanstack/react-table' {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface ColumnMeta<TData extends RowData, TValue> {
-    columnLabel?: string;
+    columnLabel?: string; 
+    _dataType?: TData;
+    _valueType?: TValue;
   }
 }
 
@@ -97,7 +98,6 @@ export function DataTable<TData extends { id: string }>({
     );
   }
 
-  // Main wrapper div for both data-filled and empty states (after loading)
   return (
     <div className={`shadow sm:rounded-lg ring-1 ring-gray-200 ${className}`}>
       <DataTableToolbar theme={theme}>

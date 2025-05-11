@@ -40,7 +40,6 @@ export function DropdownMenu({
   variant = 'default',
   theme = 'default',
 }: DropdownMenuProps) {
-  // Use local state if not controlled externally
   const [internalIsOpen, setInternalIsOpen] = React.useState(false);
   const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
   
