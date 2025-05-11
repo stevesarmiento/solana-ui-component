@@ -1,5 +1,6 @@
 import { type Row, flexRender } from '@tanstack/react-table';
 import { type Theme, themes } from './themes';
+import { TableRow, TableCell } from './table';
 
 export interface DataTableRowProps<TData extends { id: string }> {
   /**
@@ -36,19 +37,19 @@ export function DataTableRow<TData extends { id: string }>({
   const themeStyles = themes[theme] || themes.default;
   
   return (
-    <tr
+    <TableRow
       key={row.id}
       className={`${themeStyles.row} ${className}`}
     >
       {row.getVisibleCells().map((cell) => (
-        <td
+        <TableCell
           key={cell.id}
           className={themeStyles.cell}
         >
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </td>
+        </TableCell>
       ))}
       {children}
-    </tr>
+    </TableRow>
   );
 }

@@ -63,7 +63,7 @@ export const themes: Record<Theme, ThemeStyles> = {
     cell: 'px-6 py-4 whitespace-nowrap text-sm text-gray-800',
     
     // Toolbar styles
-    toolbar: 'flex items-center justify-between p-2 border-b border-gray-200 gap-x-4',
+    toolbar: 'flex items-center justify-between p-2 border-b border-gray-200 gap-x-4 bg-white rounded-t-lg',
     toolbarSection: 'flex-grow',
     toolbarSearchInput: 'block w-full sm:w-auto md:min-w-[250px] lg:min-w-[300px] p-2 border border-gray-300 rounded-md shadow-sm focus:ring-4 focus:ring-indigo-50 focus:border-gray-300 sm:text-sm transition-all duration-150 ease-in-out',
     toolbarDropdown: 'ml-auto flex-shrink-0',
@@ -71,7 +71,7 @@ export const themes: Record<Theme, ThemeStyles> = {
     toolbarInput: 'shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md',
     
     // Pagination styles
-    pagination: 'flex items-center justify-between py-3 px-2 border-t border-gray-200',
+    pagination: 'flex items-center justify-between py-3 px-2 border-t border-gray-200 bg-white rounded-b-lg',
     paginationButton: 'relative inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2',
     paginationButtonActive: 'bg-indigo-50 border-indigo-500 text-indigo-600',
     paginationSelect: 'appearance-none w-auto pl-3 pr-8 py-1.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-white',

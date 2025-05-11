@@ -3,17 +3,23 @@ import {
   type HeaderGroup, 
   type Row, 
   type RowData, 
-  type Table
+  type Table as TanstackTable
 } from '@tanstack/react-table';
 import { DataTableToolbar, DataTableGlobalFilter, DataTableColumnToggle } from './data-table-toolbar';
 import { DataTablePaginationControls } from './data-table-pagination';
 import { DataTableSkeleton } from './data-table-skeleton';
-import { DataTableRow } from './data-table-row';
 import { DataTableHeader } from './data-table-header';
+import { DataTableRow } from './data-table-row';
 import { useDataTable } from './use-data-table';
 import { type Theme, themes } from './themes';
+import {
+  Table,
+  TableBody,
+  TableRow,
+  TableCell
+} from './table';
 
-// Column Meta augmentation - would need to be in each file that uses it
+// Column Meta augmentation
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
     columnLabel?: string; 
@@ -22,8 +28,7 @@ declare module '@tanstack/react-table' {
   }
 }
 
-// Example data type - could be moved to a separate example file 
-// Delete this and implement your own data type under your project structure
+// Example data type
 export interface SolanaTransactionRow {
   id: string;
   signature: string;
@@ -49,7 +54,7 @@ export interface DataTableProps<TData extends { id: string }> {
   pageSizeOptions?: number[];
   className?: string;
   tableId?: string;
-  renderRow?: (props: { row: Row<TData>; table: Table<TData> }) => React.ReactNode;
+  renderRow?: (props: { row: Row<TData>; table: TanstackTable<TData> }) => React.ReactNode;
   renderHeader?: (props: { headerGroups: HeaderGroup<TData>[] }) => React.ReactNode;
   theme?: Theme;
 }
@@ -109,43 +114,47 @@ export function DataTable<TData extends { id: string }>({
         <DataTableColumnToggle table={table} theme={theme} />
       </DataTableToolbar>
 
-      <div className={themeStyles.tableWrapper}>
-        <table
-          id={tableId}
-          className={themeStyles.table}
-          aria-label={tableId || 'Data table'}
-        >
-          {renderHeader ? (
-            renderHeader({ headerGroups: table.getHeaderGroups() })
+      <Table 
+        className={themeStyles.table}
+        id={tableId}
+      >
+        {renderHeader ? (
+          renderHeader({ headerGroups: table.getHeaderGroups() })
+        ) : (
+          <DataTableHeader
+            headerGroups={table.getHeaderGroups()}
+            theme={theme}
+          />
+        )}
+        
+        <TableBody className={themeStyles.bodyWrapper}>
+          {table.getRowModel().rows.length > 0 ? (
+            table.getRowModel().rows.map((row) => (
+              renderRow ? (
+                renderRow({ row, table })
+              ) : (
+                <DataTableRow
+                  key={row.id}
+                  row={row}
+                  theme={theme}
+                />
+              )
+            ))
           ) : (
-            <DataTableHeader headerGroups={table.getHeaderGroups()} theme={theme} />
+            // Empty state row
+            <TableRow>
+              <TableCell
+                colSpan={table.getVisibleLeafColumns().length || columns.length}
+                className={`${themeStyles.cell} py-10 text-center`}
+                role="status"
+                aria-live="polite"
+              >
+                {emptyStateMessage}
+              </TableCell>
+            </TableRow>
           )}
-          
-          <tbody className={themeStyles.bodyWrapper}>
-            {table.getRowModel().rows.length > 0 ? (
-              table.getRowModel().rows.map((row) => (
-                renderRow ? (
-                  renderRow({ row, table })
-                ) : (
-                  <DataTableRow key={row.id} row={row} theme={theme} />
-                )
-              ))
-            ) : (
-              // Empty state row
-              <tr>
-                <td
-                  colSpan={table.getVisibleLeafColumns().length || columns.length}
-                  className={`${themeStyles.cell} py-10 text-center`}
-                  role="status"
-                  aria-live="polite"
-                >
-                  {emptyStateMessage}
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+        </TableBody>
+      </Table>
 
       {(table.getPageCount() > 0 || controlledPageCount) && (
          <DataTablePaginationControls 
