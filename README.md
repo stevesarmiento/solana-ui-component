@@ -19,33 +19,6 @@ solution for displaying tabular data within web3 React applications.
   React for declarative UI, TypeScript for type safety, and Tailwind CSS for
   styling.
 
-## Features List
-
-- **Client-side Pagination:**
-  - Page size selection
-  - "Go to page" input
-  - First/Last/Next/Previous page controls with intuitive chevron icons
-- **Client-side Sorting:** Single-column sorting (ascending/descending) with
-  visual indicators.
-- **Global Text Filtering:** Search across all visible columns with a clean
-  search input.
-- **Column Visibility Toggle:** Allow users to show or hide individual columns
-  via dropdown.
-- **Row Actions:** Configurable dropdown menu for common row actions (view,
-  edit, delete).
-- **Customizable Cell and Header Rendering:** Full control over how cells and
-  headers are rendered, thanks to TanStack Table's `ColumnDef`.
-- **Loading and Empty States:** Clear visual feedback with skeleton loading
-  states.
-- **Type-Safe:** Built with TypeScript, ensuring robust and maintainable code.
-- **Styled with Tailwind CSS:** Easily customize the appearance using utility
-  classes or by extending your project's Tailwind configuration.
-- **Theming System:** Switch between pre-built themes or create your own custom
-  themes.
-- **Accessibility:**
-  - Uses appropriate ARIA attributes (`aria-live`, `aria-busy`, `aria-label`,
-    `role="status"`, etc.).
-  - Focus management for interactive elements.
 
 ## Component Architecture
 
