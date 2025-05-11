@@ -160,7 +160,7 @@ const sampleData: SolanaTransactionRow[] = [
 ];
 
   const CodeBlock = ({ children }: { children: React.ReactNode }) => (
-  <pre className="bg-gray-800 text-white p-4 rounded-md overflow-x-auto text-sm my-4 text-left">
+  <pre className="bg-gray-800 text-white p-4 rounded-md overflow-x-auto text-xs my-4 text-left">
       <code>{children}</code>
     </pre>
   );
