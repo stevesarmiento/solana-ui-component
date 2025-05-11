@@ -71,7 +71,7 @@ export function DataTableRowActions<TData>({
     <DropdownMenu 
       buttonLabel={ellipsisIcon} 
       showCaret={false} 
-      align="left"
+      align="right"
       buttonClassName={themeStyles.rowActionsButton}
       theme={theme}
     >
