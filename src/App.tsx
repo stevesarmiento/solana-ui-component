@@ -472,7 +472,7 @@ function UserTable() {
 
             {/* Theme Customization */}
             <h4 className="text-lg font-semibold text-indigo-700 mb-4 flex items-center">
-              <IconTheme /> <span className="ml-2">Advanced Customization</span>
+              <IconTheme /> <span className="ml-2">Advanced Theme Customization</span>
             </h4>
             <div className="mb-8">
               <ol className="list-decimal list-inside text-gray-600 pl-2 space-y-2">
