@@ -288,8 +288,9 @@ function App() {
                   <li><code className="bg-gray-100 px-1 rounded">data-table-row.tsx</code> - Renders individual data rows</li>
                   <li><code className="bg-gray-100 px-1 rounded">data-table-row-actions.tsx</code> - Actions for each row</li>
                   <li><code className="bg-gray-100 px-1 rounded">data-table-pagination.tsx</code> - Pagination controls</li>
+                  <li><code className="bg-gray-100 px-1 rounded">use-data-table.ts</code> - Custom hook for managing table state</li>
                 </ul>
-                <p className="mt-2">All components use shared theme settings defined in <code className="bg-gray-100 px-1 rounded">themes.ts</code> for fully customizable styling and are built using the <code className="bg-gray-100 px-1 rounded">table.tsx</code> and <code className="bg-gray-100 px-1 rounded">dropdown-menu.tsx</code> components.</p>
+                <p className="mt-2">All components use shared theme settings defined in <code className="bg-gray-100 px-1 rounded">themes.ts</code> for fully customizable styling and are built using the <code className="bg-gray-100 px-1 rounded">table.tsx</code> and <code className="bg-gray-100 px-1 rounded">dropdown-menu.tsx</code> base primitives.</p>
               </div>
               
             <h4 className="text-lg font-semibold text-indigo-700 mb-4 flex items-center">
