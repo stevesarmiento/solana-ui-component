@@ -436,12 +436,12 @@ function UserTable() {
                 
                 <div>
                   <dt className="font-medium text-gray-800">
-                    <code className="bg-gray-100 text-indigo-600 px-1 rounded text-sm">theme</code>
+                    <code className="bg-gray-100 text-indigo-600 px-1 rounded text-sm">loadingMessage</code>
                   </dt>
                   <dd className="text-gray-600 ml-5">
-                    The visual theme to apply to the table.
+                    Custom message to display during loading state.
                     <br />
-                    <span className="text-xs italic">Default: <code>'default'</code>. Options: <code>'default', 'windows95'</code></span>
+                    <span className="text-xs italic">Default: <code>'Loading data...'</code></span>
                   </dd>
                 </div>
                 
@@ -454,8 +454,42 @@ function UserTable() {
                     <br />
                     <span className="text-xs italic">Default: <code>'No data available.'</code></span>
                   </dd>
-                </div>  
-              <div>
+                </div>
+                
+                <div>
+                  <dt className="font-medium text-gray-800">
+                    <code className="bg-gray-100 text-indigo-600 px-1 rounded text-sm">theme</code>
+                  </dt>
+                  <dd className="text-gray-600 ml-5">
+                    The visual theme to apply to the table.
+                    <br />
+                    <span className="text-xs italic">Default: <code>'default'</code>. Options: <code>'default', 'windows95'</code></span>
+                  </dd>
+                </div>
+                
+                <div>
+                  <dt className="font-medium text-gray-800">
+                    <code className="bg-gray-100 text-indigo-600 px-1 rounded text-sm">tableId</code>
+                  </dt>
+                  <dd className="text-gray-600 ml-5">
+                    Unique identifier for the table element.
+                    <br />
+                    <span className="text-xs italic">Useful for accessibility and testing.</span>
+                  </dd>
+                </div>
+                
+                <div>
+                  <dt className="font-medium text-gray-800">
+                    <code className="bg-gray-100 text-indigo-600 px-1 rounded text-sm">className</code>
+                  </dt>
+                  <dd className="text-gray-600 ml-5">
+                    Additional CSS classes to apply to the table container.
+                    <br />
+                    <span className="text-xs italic">Can be used to override specific styles.</span>
+                  </dd>
+                </div>
+                
+                <div>
                   <dt className="font-medium text-gray-800">
                     <code className="bg-gray-100 text-indigo-600 px-1 rounded text-sm">pagination props</code>
                   </dt>
@@ -463,6 +497,17 @@ function UserTable() {
                     <code>pageCount</code>, <code>pageIndex</code>, <code>pageSize</code>, <code>onPageIndexChange</code>, <code>onPageSizeChange</code>, <code>pageSizeOptions</code>
                     <br />
                     <span className="text-xs italic">Used for controlled pagination (server-side).</span>
+                  </dd>
+                </div>
+                
+                <div>
+                  <dt className="font-medium text-gray-800">
+                    <code className="bg-gray-100 text-indigo-600 px-1 rounded text-sm">renderRow/renderHeader</code>
+                  </dt>
+                  <dd className="text-gray-600 ml-5">
+                    Custom render functions for complete control over row and header rendering.
+                    <br />
+                    <span className="text-xs italic">Useful for advanced customization needs.</span>
                   </dd>
                 </div>
               </dl>

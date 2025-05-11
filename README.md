@@ -50,7 +50,8 @@ solution for displaying tabular data within web3 React applications.
 ## Component Architecture
 
 The DataTable is built with a modular, composable architecture for maximum
-flexibility:
+flexibility using custom base primitives like `table.tsx` and
+`dropdown-menu.tsx`
 
 - `data-table.tsx`: The main component that orchestrates all the subcomponents.
 - `data-table-header.tsx` Handles the table header rendering with sort
@@ -81,7 +82,7 @@ compose their own tables using the individual pieces.
    ```
 2. **Navigate to the project directory:**
    ```bash
-   cd <repository-name>
+   cd solana-ui-component
    ```
 3. **Install dependencies:**
    ```bash
@@ -90,6 +91,12 @@ compose their own tables using the individual pieces.
    yarn install
    # or
    pnpm install
+   ```
+4. **Run**
+   ```bash
+   npm run dev
+   # or
+   npm run storybook
    ```
 
 ## Basic Usage Example
@@ -171,23 +178,24 @@ export default MyPage;
 
 The `DataTable` component accepts the following props:
 
-| Prop                | Type                          | Default                 | Description                                                                                                        |
-| :------------------ | :---------------------------- | :---------------------- | :----------------------------------------------------------------------------------------------------------------- |
-| `data`              | `TData[]`                     | N/A (Required)          | Array of data objects to display in the table. Each object represents a row.                                       |
-| `columns`           | `ColumnDef<TData, unknown>[]` | N/A (Required)          | Array of column definitions that configure the table's columns. Uses TanStack Table's `ColumnDef` type.            |
-| `isLoading`         | `boolean`                     | `false`                 | Indicates if the table is currently loading data. Shows skeleton UI when true.                                     |
-| `emptyStateMessage` | `React.ReactNode`             | `"No data available."`  | Custom message or React node to display when `data` is empty and not loading.                                      |
-| `pageCount`         | `number`                      | `undefined`             | The total number of pages available. Providing this enables manual/server-side pagination.                         |
-| `pageIndex`         | `number`                      | `undefined`             | The current page index (0-based). Used for controlled pagination.                                                  |
-| `pageSize`          | `number`                      | `undefined`             | The number of rows to display per page. Used for controlled pagination.                                            |
-| `onPageIndexChange` | `(pageIndex: number) => void` | `undefined`             | Callback function invoked when the page index changes. Used for controlled pagination.                             |
-| `onPageSizeChange`  | `(pageSize: number) => void`  | `undefined`             | Callback function invoked when the page size changes. Used for controlled pagination.                              |
-| `pageSizeOptions`   | `number[]`                    | `[10, 20, 30, 50, 100]` | Array of page size options for the user to select in the pagination controls.                                      |
-| `className`         | `string`                      | `''`                    | Custom CSS class name to apply to the main wrapper div of the DataTable.                                           |
-| `tableId`           | `string`                      | `undefined`             | A unique ID for the table element. Useful for accessibility (e.g., `aria-labelledby`) or for targeting with tests. |
-| `renderRow`         | `Function`                    | `undefined`             | Optional custom row renderer function for complete control over row rendering.                                     |
-| `renderHeader`      | `Function`                    | `undefined`             | Optional custom header renderer function for complete control over header rendering.                               |
-| `theme`             | `'default' \| 'windows95'`    | `'default'`             | Visual theme to apply to the entire table. Currently supports 'default' and 'windows95'.                           |
+| Prop                | Type                                                                   | Default                 | Description                                                                                                        |
+| :------------------ | :--------------------------------------------------------------------- | :---------------------- | :----------------------------------------------------------------------------------------------------------------- |
+| `data`              | `TData[]`                                                              | N/A (Required)          | Array of data objects to display in the table. Each object represents a row.                                       |
+| `columns`           | `ColumnDef<TData, unknown>[]`                                          | N/A (Required)          | Array of column definitions that configure the table's columns. Uses TanStack Table's `ColumnDef` type.            |
+| `isLoading`         | `boolean`                                                              | `false`                 | Indicates if the table is currently loading data. Shows skeleton UI when true.                                     |
+| `loadingMessage`    | `React.ReactNode`                                                      | `"Loading data..."`     | Custom message or React node to display when in loading state.                                                     |
+| `emptyStateMessage` | `React.ReactNode`                                                      | `"No data available."`  | Custom message or React node to display when `data` is empty and not loading.                                      |
+| `pageCount`         | `number`                                                               | `undefined`             | The total number of pages available. Providing this enables manual/server-side pagination.                         |
+| `pageIndex`         | `number`                                                               | `undefined`             | The current page index (0-based). Used for controlled pagination.                                                  |
+| `pageSize`          | `number`                                                               | `undefined`             | The number of rows to display per page. Used for controlled pagination.                                            |
+| `onPageIndexChange` | `(pageIndex: number) => void`                                          | `undefined`             | Callback function invoked when the page index changes. Used for controlled pagination.                             |
+| `onPageSizeChange`  | `(pageSize: number) => void`                                           | `undefined`             | Callback function invoked when the page size changes. Used for controlled pagination.                              |
+| `pageSizeOptions`   | `number[]`                                                             | `[10, 20, 30, 50, 100]` | Array of page size options for the user to select in the pagination controls.                                      |
+| `className`         | `string`                                                               | `''`                    | Custom CSS class name to apply to the main wrapper div of the DataTable.                                           |
+| `tableId`           | `string`                                                               | `undefined`             | A unique ID for the table element. Useful for accessibility (e.g., `aria-labelledby`) or for targeting with tests. |
+| `renderRow`         | `(props: { row: Row<TData>; table: Table<TData> }) => React.ReactNode` | `undefined`             | Optional custom row renderer function for complete control over row rendering.                                     |
+| `renderHeader`      | `(props: { headerGroups: HeaderGroup<TData>[] }) => React.ReactNode`   | `undefined`             | Optional custom header renderer function for complete control over header rendering.                               |
+| `theme`             | `'default' \| 'windows95'`                                             | `'default'`             | Visual theme to apply to the entire table. Currently supports 'default' and 'windows95'.                           |
 
 _(Where `TData` is a generic type extending `{ id: string }`)_
 
@@ -243,7 +251,8 @@ The theming system ensures consistent styling across all aspects of the table:
 
 ### Creating Custom Themes
 
-The theming system is extensible. To create your own theme:
+The theming system is extensible. To create your own theme for your design
+system:
 
 1. Modify the `Theme` type in `themes.ts` to include your new theme name
 2. Add your theme's styles to the `themes` object in the same file
